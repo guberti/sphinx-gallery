@@ -59,9 +59,7 @@ This is :math:`some` math :math:`stuff`.
 For more details on interpolation see the page :ref:`channel_interpolation`.
 .. _foo: bar
 
-.. image:: foobar
-  :alt: me
-  :whatever: you
+`See more  <https://en.wikipedia.org/wiki/Interpolation>`_.
 """
 
     markdown = """hello
@@ -75,7 +73,7 @@ This is $some$ math $stuff$.
 
 For more details on interpolation see the page `channel_interpolation`.
 
-![me](foobar)
+[See more](https://en.wikipedia.org/wiki/Interpolation).
 """  # noqa
     assert rst2md(rst) == markdown
 
