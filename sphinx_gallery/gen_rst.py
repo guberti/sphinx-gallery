@@ -66,7 +66,9 @@ from . import sphinx_compatibility
 from .backreferences import write_backreferences, _thumbnail_div
 from .downloads import CODE_DOWNLOAD
 from .py_source_parser import (split_code_and_text_blocks,
-                               get_docstring_and_rest, remove_config_comments)
+                               get_docstring_and_rest,
+                               remove_config_comments,
+                               remove_ignore_blocks)
 
 from .notebook import jupyter_notebook, save_notebook
 from .binder import check_binder_conf, gen_binder_rst
@@ -730,6 +732,17 @@ def generate_file_rst(fname, target_dir, src_dir, gallery_conf):
             (label, remove_config_comments(content), line_number)
             for label, content, line_number in script_blocks
         ]
+
+    script_blocks = [
+        (label, remove_ignore_blocks(content), line_number)
+        for label, content, line_number in script_blocks
+    ]
+
+    # Remove final empty block, which can occur after config comments
+    # are removed
+    if script_blocks[-1][1].isspace():
+        script_blocks = script_blocks[:-1]
+        output_blocks = output_blocks[:-1]
 
     output_blocks, time_elapsed = execute_script(script_blocks,
                                                  script_vars,

@@ -9,6 +9,11 @@ dictionary specified in your ``conf.py`` file. A list of the possible
 keys are listed :ref:`below <list_of_options>` and explained in
 greater detail in subsequent sections.
 
+When using these flags, it is good practice to make sure the source Python files
+are equivalent to the generated HTML and iPython notebooks (i.e. make sure
+``.py == .html == .ipynb``). This principle should be violated only when
+necessary, and on a case-by-case basis.
+
 .. _list_of_options:
 
 List of config options
@@ -48,6 +53,9 @@ Some options can also be set or overridden on a file-by-file basis:
 
 See also :ref:`removing_config_comments` to hide these comments from the
 rendered examples.
+
+Some options can be set on a per-line basis in a file:
+- ``# sphinx_gallery_start_ignore`` and ``# sphinx_gallery_end_ignore`` (:ref:`hiding_code_blocks`)
 
 Some options can be set during the build execution step, e.g. using a Makefile:
 
@@ -751,6 +759,46 @@ images produced by an arbitrary package. For instructions, see
 useful for general use (e.g., a custom scraper for a plotting library)
 feel free to add it to the list above (see discussion
 `here <https://github.com/sphinx-gallery/sphinx-gallery/issues/441#issuecomment-493782430>`__)!
+
+.. _hiding_code_blocks:
+
+Hiding lines of code
+====================
+
+Normally, Sphinx-Gallery will render every line of Python code when building
+HTML and iPython notebooks. This is usually desirable, as we want to ensure the
+Python source files, HTML, and iPython notebooks all do the same thing.
+
+However, it is sometimes useful to have Python code that runs, but is not
+included in any user-facing documentation. For example, suppose we wanted to
+add some ``assert`` statements to verify the docs were built successfully, but
+did not want these shown to users. We could use the ``sphinx_gallery_start_ignore``
+and ``sphinx_gallery_end_ignore`` flags to achieve this::
+
+    model.compile()
+    # sphinx_gallery_start_ignore
+    assert len(model.layers) == 5
+    assert model.count_params() == 219058
+    # sphinx_gallery_end_ignore
+    model.fit()
+
+When the HTML or iPython notebooks are built, this code block will be shown as::
+
+    model.compile()
+    model.fit()
+
+The ``sphinx_gallery_start_ignore`` and ``sphinx_gallery_end_ignore`` flags may
+be used in any code block, and multiple pairs of flags may be used in the same
+block. Every start flag must always have a corresponding end flag, or an error
+will be raised during doc generation. These flags and the code between them are
+always removed, regardless of what ``remove_config_comments`` is set to.
+
+Note that any output from the ignored code will still be captured.
+
+.. warning::
+  This flag should be used sparingly, as it makes the ``.py`` source files less
+  equivalent to the generated ``.html`` and ``.ipynb`` files. It is bad practice
+  to use this when other methods that preserve this relationship are possible.
 
 .. _reset_modules:
 

@@ -17,6 +17,7 @@ import zipfile
 import codeop
 
 import pytest
+from sphinx.errors import ExtensionError
 
 import sphinx_gallery.gen_rst as sg
 from sphinx_gallery import downloads
@@ -45,6 +46,9 @@ CONTENT = [
     '',
     '# sphinx_gallery_thumbnail_number = 1'
     '# and now comes the module code',
+    '# sphinx_gallery_start_ignore',
+    'pass # Will be run but not rendered',
+    '# sphinx_gallery_end_ignore',
     'import logging',
     'import sys',
     'from warnings import warn',
@@ -332,6 +336,15 @@ def test_remove_config_comments(gallery_conf):
     gallery_conf['remove_config_comments'] = True
     rst = _generate_rst(gallery_conf, 'test.py', CONTENT)
     assert '# sphinx_gallery_thumbnail_number = 1' not in rst
+
+
+def test_remove_ignore_blocks(gallery_conf):
+    """Test removal of ignore blocks."""
+    rst = _generate_rst(gallery_conf, 'test.py', CONTENT)
+    assert 'pass # Will be run but not rendered' in CONTENT
+    assert 'pass # Will be run but not rendered' not in rst
+    assert '# sphinx_gallery_start_ignore' in CONTENT
+    assert '# sphinx_gallery_start_ignore' not in rst
 
 
 @pytest.mark.parametrize('ext', ('.txt', '.rst', '.bad'))
