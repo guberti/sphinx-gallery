@@ -365,5 +365,6 @@ sphinx_gallery_conf = {
                'use_jupyter_lab': True,
                },
     'show_memory': True,
+    'promote_jupyter_magic': False,
     'junit': os.path.join('sphinx-gallery', 'junit-results.xml'),
 }

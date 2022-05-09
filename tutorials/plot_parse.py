@@ -90,9 +90,15 @@ print('two')
 #
 B = 1
 
-##############################################################################
-# End comments
+###############################################################################
+# Code blocks containing Jupyter magic are executable
+#     .. code-block:: bash
 #
+#       %%bash
+#       # This could be run!
+#
+
+###############################################################################
 # That's all folks !
 #
 # .. literalinclude:: plot_parse.py

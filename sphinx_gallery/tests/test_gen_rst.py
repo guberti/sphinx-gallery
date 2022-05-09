@@ -86,6 +86,8 @@ def test_bug_cases_of_notebook_syntax():
             'tutorials/plot_parse.py')
 
         assert file_conf == {}
+        for block in blocks:
+            print(block)
         assert blocks == ref_blocks
 
 
